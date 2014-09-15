@@ -1,4 +1,4 @@
-package me.olegg.bezierclock;
+package net.olegg.bezierclock;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -55,6 +55,7 @@ public class BezierClockService extends WallpaperService {
             paint.setStrokeWidth(10);
             paint.setStyle(Paint.Style.STROKE);
             paint.setDither(true);
+            paint.setAntiAlias(true);
         }
 
         @Override

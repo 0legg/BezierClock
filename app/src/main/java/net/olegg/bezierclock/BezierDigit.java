@@ -1,4 +1,4 @@
-package me.olegg.bezierclock;
+package net.olegg.bezierclock;
 
 public enum BezierDigit {
     DIGIT_0(new float[]{254.0f, 47.0f,

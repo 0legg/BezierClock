@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="me.olegg.bezierclock">
+    package="net.olegg.bezierclock">
 
     <uses-feature
         android:name="android.software.live_wallpaper"
@@ -10,7 +10,7 @@
         android:icon="@drawable/ic_launcher">
 
         <service
-            android:name="me.olegg.bezierclock.BezierClockService"
+            android:name="net.olegg.bezierclock.BezierClockService"
             android:enabled="true"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_WALLPAPER" >

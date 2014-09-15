@@ -5,7 +5,7 @@ android {
     buildToolsVersion "20.0.0"
 
     defaultConfig {
-        applicationId "me.olegg.bezierclock"
+        applicationId "net.olegg.bezierclock"
         minSdkVersion 8
         targetSdkVersion 20
         versionCode 1
