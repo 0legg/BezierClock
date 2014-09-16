@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <net.margaritov.preference.colorpicker.ColorPickerPreference
+        android:key="background"
+        android:title="@string/background"
+        android:defaultValue="@android:color/white"/>
+
+    <net.margaritov.preference.colorpicker.ColorPickerPreference
+        android:key="foreground"
+        android:title="@string/foreground"
+        android:defaultValue="@android:color/black"/>
+</PreferenceScreen>

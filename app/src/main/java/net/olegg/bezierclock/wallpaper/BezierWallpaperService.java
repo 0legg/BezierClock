@@ -1,5 +1,6 @@
-package net.olegg.bezierclock;
+package net.olegg.bezierclock.wallpaper;
 
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -7,25 +8,31 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.service.wallpaper.WallpaperService;
 import android.view.SurfaceHolder;
 
+import net.olegg.bezierclock.core.BezierAnimator;
+
 import java.util.Calendar;
 
-public class BezierClockService extends WallpaperService {
+public class BezierWallpaperService extends WallpaperService {
     @Override
     public Engine onCreateEngine() {
         return new BezierClockEngine();
     }
 
-    public class BezierClockEngine extends WallpaperService.Engine {
+    public class BezierClockEngine extends WallpaperService.Engine implements SharedPreferences.OnSharedPreferenceChangeListener {
+        private int background = Color.WHITE;
+        private int foreground = Color.BLACK;
 
         private Paint paint = new Paint();
         private Matrix matrix = new Matrix();
         private Path path = new Path();
 
         private final float[] shifts = {0.0f, 300.0f, 800.0f, 1100.0f, 1600.0f, 1900.0f};
-        private final RectF field = new RectF(0.0f, 0.0f, 2380.0f, 550.0f);
+        private final RectF modelRect = new RectF(0.0f, 0.0f, 2380.0f, 550.0f);
+        private final RectF realRect = new RectF();
 
         private static final int DELAY = 50; //ms
 
@@ -51,11 +58,14 @@ public class BezierClockService extends WallpaperService {
 
         public BezierClockEngine() {
             super();
-            paint.setColor(Color.BLACK);
             paint.setStrokeWidth(10);
             paint.setStyle(Paint.Style.STROKE);
             paint.setDither(true);
             paint.setAntiAlias(true);
+
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            preferences.registerOnSharedPreferenceChangeListener(this);
+            onSharedPreferenceChanged(preferences, null);
         }
 
         @Override
@@ -70,9 +80,10 @@ public class BezierClockService extends WallpaperService {
 
         @Override
         public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-            float partSize = width / field.width();
-            float y = (height - field.height() * partSize) / 2;
-            matrix.setRectToRect(field, new RectF(0, y, width, y + field.height() * partSize), Matrix.ScaleToFit.CENTER);
+            float partSize = width / modelRect.width();
+            float y = (height - modelRect.height() * partSize) / 2;
+            realRect.set(0, y, width, y + modelRect.height() * partSize);
+            matrix.setRectToRect(modelRect, realRect, Matrix.ScaleToFit.CENTER);
             draw();
         }
 
@@ -97,13 +108,13 @@ public class BezierClockService extends WallpaperService {
         private void draw() {
 
             SurfaceHolder holder = getSurfaceHolder();
-            Canvas c = null;
+            Canvas canvas = null;
             try {
-                c = holder.lockCanvas();
+                canvas = holder.lockCanvas();
 
-                if (c != null) {
-                    c.setMatrix(matrix);
-                    c.drawColor(Color.WHITE);
+                if (canvas != null) {
+                    canvas.setMatrix(matrix);
+                    canvas.drawColor(background);
 
                     calendar.setTimeInMillis(System.currentTimeMillis());
                     int millis = calendar.get(Calendar.MILLISECOND);
@@ -154,11 +165,11 @@ public class BezierClockService extends WallpaperService {
                         }
                     }
 
-                    c.drawPath(path, paint);
+                    canvas.drawPath(path, paint);
                 }
             } finally {
-                if (c != null) {
-                    holder.unlockCanvasAndPost(c);
+                if (canvas != null) {
+                    holder.unlockCanvasAndPost(canvas);
                 }
             }
             handler.removeCallbacks(drawRunnable);
@@ -167,27 +178,12 @@ public class BezierClockService extends WallpaperService {
                 handler.postDelayed(drawRunnable, DELAY);
             }
         }
-    }
 
-    private class BezierAnimator {
-        private float animationStartRatio;
-        public float[] points = new float[BezierDigit.SIZE];
-
-        public BezierAnimator(float timeInterval, float animDuration) {
-            animationStartRatio = (timeInterval - animDuration) / timeInterval;
-        }
-
-        public void update(int currentDigit, int nextDigit, float ratio) {
-            float animationRatio = 0.0f;
-            if (ratio > animationStartRatio) {
-                animationRatio = (ratio - animationStartRatio) / (1 - animationStartRatio);
-            }
-
-            animationRatio = (float)(-Math.cos(animationRatio * Math.PI) + 1) / 2;
-            for (int i = 0; i < BezierDigit.SIZE; ++i) {
-                points[i] = BezierDigit.DIGITS[currentDigit].vertices[i] +
-                        (BezierDigit.DIGITS[nextDigit].vertices[i] - BezierDigit.DIGITS[currentDigit].vertices[i]) * animationRatio;
-            }
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            background = sharedPreferences.getInt(BezierWallpaperSettings.BACKGROUND, Color.WHITE);
+            foreground = sharedPreferences.getInt(BezierWallpaperSettings.FOREGROUND, Color.BLACK);
+            paint.setColor(foreground);
         }
     }
 }
