@@ -7,7 +7,9 @@
         android:name="android.software.live_wallpaper"
         android:required="true" />
 
-    <application tools:replace="android:icon"
+    <application
+        tools:node="replace"
+        tools:replace="android:icon"
         android:allowBackup="true"
         android:label="@string/app_name"
         android:icon="@drawable/ic_launcher">
@@ -32,10 +34,6 @@
             android:name=".wallpaper.BezierWallpaperSettings"
             android:theme="@android:style/Theme.Light.WallpaperSettings"
             android:exported="true"/>
-
-        <activity android:name="net.margaritov.preference.colorpicker.Test"
-            tools:node="remove"/>
-
     </application>
 
 </manifest>
