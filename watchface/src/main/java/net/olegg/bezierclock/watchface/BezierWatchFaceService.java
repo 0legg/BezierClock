@@ -1,28 +1,31 @@
-package net.olegg.bezierclock.wallpaper;
+package net.olegg.bezierclock.watchface;
 
-import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Handler;
-import android.preference.PreferenceManager;
-import android.service.wallpaper.WallpaperService;
+import android.support.wearable.watchface.CanvasWatchFaceService;
 import android.view.SurfaceHolder;
 
 import net.olegg.bezierclock.core.BezierAnimator;
 
 import java.util.Calendar;
 
-public class BezierWallpaperService extends WallpaperService {
+/**
+ * Created by olegg on 11.12.14.
+ */
+public class BezierWatchFaceService extends CanvasWatchFaceService {
     @Override
-    public WallpaperService.Engine onCreateEngine() {
+    public Engine onCreateEngine() {
         return new Engine();
     }
 
-    public class Engine extends WallpaperService.Engine implements SharedPreferences.OnSharedPreferenceChangeListener {
+    /* implement service callback methods */
+    private class Engine extends CanvasWatchFaceService.Engine {
         private int background = Color.WHITE;
         private int foreground = Color.BLACK;
 
@@ -39,12 +42,12 @@ public class BezierWallpaperService extends WallpaperService {
         private final Calendar calendar = Calendar.getInstance();
 
         private BezierAnimator[] digits = {
-            new BezierAnimator(36000.0f, 5.0f),
-            new BezierAnimator(3600.0f, 5.0f),
-            new BezierAnimator(600.0f, 5.0f),
-            new BezierAnimator(60.0f, 5.0f),
-            new BezierAnimator(10.0f, 2.0f),
-            new BezierAnimator(1.0f, 1.0f),
+                new BezierAnimator(36000.0f, 5.0f),
+                new BezierAnimator(3600.0f, 5.0f),
+                new BezierAnimator(600.0f, 5.0f),
+                new BezierAnimator(60.0f, 5.0f),
+                new BezierAnimator(10.0f, 2.0f),
+                new BezierAnimator(1.0f, 1.0f),
         };
 
         private boolean visible = false;
@@ -62,10 +65,6 @@ public class BezierWallpaperService extends WallpaperService {
             paint.setStyle(Paint.Style.STROKE);
             paint.setDither(true);
             paint.setAntiAlias(true);
-
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            preferences.registerOnSharedPreferenceChangeListener(this);
-            onSharedPreferenceChanged(preferences, null);
         }
 
         @Override
@@ -76,6 +75,11 @@ public class BezierWallpaperService extends WallpaperService {
             } else {
                 handler.removeCallbacks(drawRunnable);
             }
+        }
+
+        @Override
+        public void onDraw(Canvas canvas, Rect bounds) {
+            //super.onDraw(canvas, bounds);
         }
 
         @Override
@@ -177,13 +181,6 @@ public class BezierWallpaperService extends WallpaperService {
             if (visible) {
                 handler.postDelayed(drawRunnable, DELAY);
             }
-        }
-
-        @Override
-        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            background = sharedPreferences.getInt(BezierWallpaperSettings.BACKGROUND, Color.WHITE);
-            foreground = sharedPreferences.getInt(BezierWallpaperSettings.FOREGROUND, Color.BLACK);
-            paint.setColor(foreground);
         }
     }
 }
