@@ -34,7 +34,7 @@ public class BezierWallpaperService extends WallpaperService {
         private final RectF modelRect = new RectF(0.0f, 0.0f, 2380.0f, 550.0f);
         private final RectF realRect = new RectF();
 
-        private static final int DELAY = 50; //ms
+        private static final int DELAY = 16; //ms
 
         private final Calendar calendar = Calendar.getInstance();
 
