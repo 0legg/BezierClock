@@ -1,5 +1,9 @@
 package net.olegg.bezierclock.watchface;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -11,9 +15,12 @@ import android.os.Bundle;
 import android.support.wearable.watchface.CanvasWatchFaceService;
 import android.support.wearable.watchface.WatchFaceStyle;
 import android.text.format.Time;
+import android.view.Gravity;
 import android.view.SurfaceHolder;
 
 import net.olegg.bezierclock.core.BezierAnimator;
+
+import java.util.TimeZone;
 
 /**
  * Created by olegg on 11.12.14.
@@ -75,6 +82,13 @@ public class BezierWatchFaceService extends CanvasWatchFaceService {
 
             setWatchFaceStyle(new WatchFaceStyle.Builder(BezierWatchFaceService.this)
                     .setShowSystemUiTime(false)
+                    .setStatusBarGravity(Gravity.RIGHT | Gravity.TOP)
+                    .setHotwordIndicatorGravity(Gravity.LEFT | Gravity.TOP)
+                    .setViewProtection(WatchFaceStyle.PROTECT_HOTWORD_INDICATOR | WatchFaceStyle.PROTECT_STATUS_BAR)
+                    .setCardPeekMode(WatchFaceStyle.PEEK_MODE_VARIABLE)
+                    .setPeekOpacityMode(WatchFaceStyle.PEEK_OPACITY_MODE_TRANSLUCENT)
+                    .setBackgroundVisibility(WatchFaceStyle.BACKGROUND_VISIBILITY_INTERRUPTIVE)
+                    .setAmbientPeekMode(WatchFaceStyle.AMBIENT_PEEK_MODE_VISIBLE)
                     .build());
         }
 
@@ -88,7 +102,12 @@ public class BezierWatchFaceService extends CanvasWatchFaceService {
         public void onVisibilityChanged(boolean visible) {
             this.visible = visible;
             if (visible) {
+                registerReceiver();
+                time.clear(TimeZone.getDefault().getID());
+                time.setToNow();
                 invalidate();
+            } else {
+                unregisterReceiver();
             }
         }
 
@@ -212,6 +231,33 @@ public class BezierWatchFaceService extends CanvasWatchFaceService {
 
         private int getNextInt(int current, int max) {
             return (current + 1) % max;
+        }
+
+        private boolean timeZoneReceiverRegistered = false;
+        private final BroadcastReceiver timeZoneReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                time.clear(intent.getStringExtra("time-zone"));
+                time.setToNow();
+                invalidate();
+            }
+        };
+
+        private void registerReceiver() {
+            if (timeZoneReceiverRegistered) {
+                return;
+            }
+            timeZoneReceiverRegistered = true;
+            IntentFilter filter = new IntentFilter(Intent.ACTION_TIMEZONE_CHANGED);
+            BezierWatchFaceService.this.registerReceiver(timeZoneReceiver, filter);
+        }
+
+        private void unregisterReceiver() {
+            if (!timeZoneReceiverRegistered) {
+                return;
+            }
+            timeZoneReceiverRegistered = false;
+            BezierWatchFaceService.this.unregisterReceiver(timeZoneReceiver);
         }
     }
 }
