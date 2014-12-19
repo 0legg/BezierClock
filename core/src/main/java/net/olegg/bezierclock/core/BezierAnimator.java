@@ -25,6 +25,6 @@ public class BezierAnimator {
     }
 
     public void update(int currentDigit) {
-        System.arraycopy(BezierDigit.DIGITS[currentDigit], 0, points, 0, BezierDigit.SIZE);
+        System.arraycopy(BezierDigit.DIGITS[currentDigit].vertices, 0, points, 0, BezierDigit.SIZE);
     }
 }
