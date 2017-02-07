@@ -12,3 +12,7 @@ allprojects {
         jcenter()
     }
 }
+
+ext {
+    playServicesVersion = '10.0.1'
+}
