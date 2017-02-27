@@ -82,9 +82,9 @@ public class BezierWatchFaceService extends CanvasWatchFaceService {
 
             setWatchFaceStyle(new WatchFaceStyle.Builder(BezierWatchFaceService.this)
                     .setShowSystemUiTime(false)
-                    .setStatusBarGravity(Gravity.RIGHT | Gravity.TOP)
-                    .setHotwordIndicatorGravity(Gravity.LEFT | Gravity.TOP)
-                    .setViewProtection(WatchFaceStyle.PROTECT_HOTWORD_INDICATOR | WatchFaceStyle.PROTECT_STATUS_BAR)
+                    .setStatusBarGravity(Gravity.END | Gravity.TOP)
+                    .setHotwordIndicatorGravity(Gravity.START | Gravity.TOP)
+                    .setViewProtectionMode(WatchFaceStyle.PROTECT_HOTWORD_INDICATOR | WatchFaceStyle.PROTECT_STATUS_BAR)
                     .setCardPeekMode(WatchFaceStyle.PEEK_MODE_VARIABLE)
                     .setPeekOpacityMode(WatchFaceStyle.PEEK_OPACITY_MODE_TRANSLUCENT)
                     .setBackgroundVisibility(WatchFaceStyle.BACKGROUND_VISIBILITY_INTERRUPTIVE)
