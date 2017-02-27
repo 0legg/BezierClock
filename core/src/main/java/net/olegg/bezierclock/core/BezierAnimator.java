@@ -1,8 +1,5 @@
 package net.olegg.bezierclock.core;
 
-import android.graphics.Matrix;
-import android.util.FloatMath;
-
 public class BezierAnimator {
     private static final float PI = (float)Math.PI;
     private float animationStartRatio;
@@ -17,7 +14,7 @@ public class BezierAnimator {
         if (ratio > animationStartRatio) {
             animationRatio = (ratio - animationStartRatio) / (1 - animationStartRatio);
         }
-        animationRatio = (1 - FloatMath.cos(animationRatio * PI)) / 2;
+        animationRatio = (1 - (float)Math.cos(animationRatio * PI)) / 2;
         for (int i = 0; i < BezierDigit.SIZE; ++i) {
             points[i] = BezierDigit.DIGITS[currentDigit].vertices[i] +
                     (BezierDigit.DIGITS[nextDigit].vertices[i] - BezierDigit.DIGITS[currentDigit].vertices[i]) * animationRatio;
