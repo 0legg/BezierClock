@@ -18,9 +18,19 @@ ext {
     commonBuildToolsVersion = '25.0.2'
     commonCompileSdkVersion = 25
     commonTargetSdkVersion = 25
-    appVersionCode = 103000
-    appVersionName = "1.3.0"
 
     playServicesVersion = '10.2.0'
     wearableVersion = '2.0.0'
+
+    versionMajor = 1
+    versionMinor = 3
+    versionPatch = 0
+}
+
+ext.generateVersionCode = { build ->
+    return versionMajor * 1000000 + versionMinor * 10000 + versionPatch * 100 + build
+}
+
+ext.generateVersionName = {
+    return "${versionMajor}.${versionMinor}.${versionPatch}"
 }
