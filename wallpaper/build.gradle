@@ -20,7 +20,7 @@ android {
 }
 
 dependencies {
-    wearApp project(':watchface')
+    wearApp project(path: ':watchface', configuration: "wear1Release")
     compile project(':core')
     compile 'net.margaritov.preference.colorpicker.ColorPickerPreference:ColorPickerPreference:1.0.0'
     compile "com.google.android.gms:play-services-wearable:$playServicesVersion"
