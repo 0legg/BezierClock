@@ -2,11 +2,16 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion commonCompileSdkVersion
+
     buildToolsVersion commonBuildToolsVersion
+
+    defaultConfig {
+        targetSdkVersion commonTargetSdkVersion
+    }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

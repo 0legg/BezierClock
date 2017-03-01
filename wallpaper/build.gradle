@@ -8,7 +8,7 @@ android {
         applicationId baseApplicationId
         minSdkVersion 14
         targetSdkVersion commonTargetSdkVersion
-        versionCode generateVersionCode(1)
+        versionCode generateVersionCode(0)
         versionName generateVersionName()
     }
     buildTypes {
