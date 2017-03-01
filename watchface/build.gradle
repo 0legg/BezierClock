@@ -1,26 +1,37 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.2"
+    compileSdkVersion commonCompileSdkVersion
+    buildToolsVersion commonBuildToolsVersion
+    publishNonDefault true
 
     defaultConfig {
-        applicationId "net.olegg.bezierclock"
-        minSdkVersion 21
-        targetSdkVersion 21
-        versionCode 5
-        versionName "1.2"
+        applicationId baseApplicationId
+        minSdkVersion 20
+        targetSdkVersion commonTargetSdkVersion
+        versionCode generateVersionCode(1)
+        versionName generateVersionName()
     }
+
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    productFlavors {
+        wear1 {
+            // same as default
+        }
+        wear2 {
+            minSdkVersion 24
         }
     }
 }
 
 dependencies {
     compile project(":core")
-    compile 'com.google.android.support:wearable:1.1.0'
-    compile 'com.google.android.gms:play-services-wearable:6.5.87'
+    compile "com.google.android.support:wearable:$wearableVersion"
+    compile "com.google.android.gms:play-services-wearable:$playServicesVersion"
 }

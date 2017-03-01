@@ -1,27 +1,27 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.2"
+    compileSdkVersion commonCompileSdkVersion
+    buildToolsVersion commonBuildToolsVersion
 
     defaultConfig {
-        applicationId "net.olegg.bezierclock"
-        minSdkVersion 9
-        targetSdkVersion 21
-        versionCode 5
-        versionName "1.2"
+        applicationId baseApplicationId
+        minSdkVersion 14
+        targetSdkVersion commonTargetSdkVersion
+        versionCode generateVersionCode(0)
+        versionName generateVersionName()
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }
 
 dependencies {
-    wearApp project(':watchface')
+    wearApp project(path: ':watchface', configuration: "wear1Release")
     compile project(':core')
-    compile 'com.robbypond:android-ColorPickerPreference:1.11.1'
-    compile 'com.google.android.gms:play-services-wearable:6.5.87'
+    compile 'net.margaritov.preference.colorpicker.ColorPickerPreference:ColorPickerPreference:1.0.0'
+    compile "com.google.android.gms:play-services-wearable:$playServicesVersion"
 }
