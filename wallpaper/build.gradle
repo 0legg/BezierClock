@@ -8,19 +8,19 @@ android {
         applicationId baseApplicationId
         minSdkVersion 14
         targetSdkVersion commonTargetSdkVersion
-        versionCode appVersionCode
-        versionName appVersionName
+        versionCode generateVersionCode(0)
+        versionName generateVersionName()
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }
 
 dependencies {
-    wearApp project(':watchface')
+    wearApp project(path: ':watchface', configuration: "wear1Release")
     compile project(':core')
     compile 'net.margaritov.preference.colorpicker.ColorPickerPreference:ColorPickerPreference:1.0.0'
     compile "com.google.android.gms:play-services-wearable:$playServicesVersion"

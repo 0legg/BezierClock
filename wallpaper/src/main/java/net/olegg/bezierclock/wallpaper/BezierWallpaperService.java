@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.os.Handler;
-import android.os.Message;
 import android.preference.PreferenceManager;
 import android.service.wallpaper.WallpaperService;
 import android.view.SurfaceHolder;
@@ -107,7 +106,6 @@ public class BezierWallpaperService extends WallpaperService {
         }
 
         private void draw() {
-
             SurfaceHolder holder = getSurfaceHolder();
             Canvas canvas = null;
             try {

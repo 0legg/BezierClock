@@ -3,18 +3,29 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion commonCompileSdkVersion
     buildToolsVersion commonBuildToolsVersion
+    publishNonDefault true
 
     defaultConfig {
         applicationId baseApplicationId
-        minSdkVersion 21
+        minSdkVersion 20
         targetSdkVersion commonTargetSdkVersion
-        versionCode appVersionCode
-        versionName appVersionName
+        versionCode generateVersionCode(1)
+        versionName generateVersionName()
     }
+
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    productFlavors {
+        wear1 {
+            // same as default
+        }
+        wear2 {
+            minSdkVersion 24
         }
     }
 }
